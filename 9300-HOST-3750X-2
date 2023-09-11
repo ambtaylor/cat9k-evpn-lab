@@ -1,0 +1,360 @@
+hostname 9300-HOST-3750X-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition pink
+ rd 3:3
+ !
+ address-family ipv4
+ exit-address-family
+!
+vrf definition red
+ rd 2:2
+ !
+ address-family ipv4
+ exit-address-family
+!
+no logging console
+enable password cisco!123
+!
+username admin password 0 cisco!123
+no aaa new-model
+switch 1 provision ws-c3750x-48
+switch 4 provision ws-c3750x-48
+system mtu routing 1800
+!
+!
+!
+!
+ip routing
+!
+!
+!
+no ip domain-lookup
+ip domain-name cisco.com
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-4127313152
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4127313152
+ revocation-check none
+ rsakeypair TP-self-signed-4127313152
+!
+!
+crypto pki certificate chain TP-self-signed-4127313152
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 34313237 33313331 3532301E 170D3036 30313032 30303031
+  34395A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D34 31323733
+  31333135 3230819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100A55F BC13370A 31B8CE80 CA228F4A E0927AD3 E19C3730 FB729386 713D8A99
+  A63C0DA0 5A81D409 5BDED426 ACD5718C FDED6DFE 31704DD6 241B02F2 49724936
+  F6B579F2 52FA6A74 C507BA24 CD6E7E7D B13104D5 BC4FEFC3 0A8CBF7A B48DE15C
+  095B387E 379A271B 70C44B29 011673CC 8A92BFC4 B0718C95 1F58C277 14BEA164
+  C6470203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603
+  551D2304 18301680 147137C6 2575C4FF 79FAD6F0 FF345E81 C69CC436 58301D06
+  03551D0E 04160414 7137C625 75C4FF79 FAD6F0FF 345E81C6 9CC43658 300D0609
+  2A864886 F70D0101 05050003 81810097 392ABC27 095292C9 2FB112CA A9E7FB95
+  6F199A8B BB9EBB8B 375433B5 41A45B6F BF7F94D9 2F6CED16 1824D5FB 654BEC40
+  F9BC4048 A80046BB 08AADB5E 2C9603A0 DFEE30D7 BA5F825A 53CEAFCB 894DAEE2
+  4F5DA2BA B6F9CD2E BC95E83C 0B5FB825 E2321321 63CC47E9 9F713264 E9F9CCFA
+  848687C9 32999604 97A53DCB 118A9C
+  	quit
+license boot level ipservices
+!
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+!
+!
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0
+ ip address 10.122.186.10 255.255.255.240
+ no ip route-cache
+!
+interface GigabitEthernet1/0/1
+ switchport trunk encapsulation dot1q
+!
+interface GigabitEthernet1/0/2
+!
+interface GigabitEthernet1/0/3
+!
+interface GigabitEthernet1/0/4
+!
+interface GigabitEthernet1/0/5
+!
+interface GigabitEthernet1/0/6
+!
+interface GigabitEthernet1/0/7
+!
+interface GigabitEthernet1/0/8
+!
+interface GigabitEthernet1/0/9
+!
+interface GigabitEthernet1/0/10
+!
+interface GigabitEthernet1/0/11
+!
+interface GigabitEthernet1/0/12
+!
+interface GigabitEthernet1/0/13
+!
+interface GigabitEthernet1/0/14
+!
+interface GigabitEthernet1/0/15
+!
+interface GigabitEthernet1/0/16
+!
+interface GigabitEthernet1/0/17
+!
+interface GigabitEthernet1/0/18
+!
+interface GigabitEthernet1/0/19
+!
+interface GigabitEthernet1/0/20
+!
+interface GigabitEthernet1/0/21
+!
+interface GigabitEthernet1/0/22
+!
+interface GigabitEthernet1/0/23
+!
+interface GigabitEthernet1/0/24
+!
+interface GigabitEthernet1/0/25
+!
+interface GigabitEthernet1/0/26
+!
+interface GigabitEthernet1/0/27
+!
+interface GigabitEthernet1/0/28
+!
+interface GigabitEthernet1/0/29
+!
+interface GigabitEthernet1/0/30
+!
+interface GigabitEthernet1/0/31
+!
+interface GigabitEthernet1/0/32
+!
+interface GigabitEthernet1/0/33
+!
+interface GigabitEthernet1/0/34
+!
+interface GigabitEthernet1/0/35
+!
+interface GigabitEthernet1/0/36
+!
+interface GigabitEthernet1/0/37
+!
+interface GigabitEthernet1/0/38
+!
+interface GigabitEthernet1/0/39
+!
+interface GigabitEthernet1/0/40
+!
+interface GigabitEthernet1/0/41
+!
+interface GigabitEthernet1/0/42
+!
+interface GigabitEthernet1/0/43
+!
+interface GigabitEthernet1/0/44
+!
+interface GigabitEthernet1/0/45
+!
+interface GigabitEthernet1/0/46
+!
+interface GigabitEthernet1/0/47
+!
+interface GigabitEthernet1/0/48
+!
+interface GigabitEthernet1/1/1
+!
+interface GigabitEthernet1/1/2
+!
+interface GigabitEthernet1/1/3
+!
+interface GigabitEthernet1/1/4
+!
+interface TenGigabitEthernet1/1/1
+!
+interface TenGigabitEthernet1/1/2
+!
+interface GigabitEthernet4/0/1
+!
+interface GigabitEthernet4/0/2
+!
+interface GigabitEthernet4/0/3
+!
+interface GigabitEthernet4/0/4
+!
+interface GigabitEthernet4/0/5
+!
+interface GigabitEthernet4/0/6
+!
+interface GigabitEthernet4/0/7
+!
+interface GigabitEthernet4/0/8
+!
+interface GigabitEthernet4/0/9
+!
+interface GigabitEthernet4/0/10
+!
+interface GigabitEthernet4/0/11
+!
+interface GigabitEthernet4/0/12
+!
+interface GigabitEthernet4/0/13
+!
+interface GigabitEthernet4/0/14
+!
+interface GigabitEthernet4/0/15
+!
+interface GigabitEthernet4/0/16
+!
+interface GigabitEthernet4/0/17
+!
+interface GigabitEthernet4/0/18
+!
+interface GigabitEthernet4/0/19
+!
+interface GigabitEthernet4/0/20
+!
+interface GigabitEthernet4/0/21
+!
+interface GigabitEthernet4/0/22
+!
+interface GigabitEthernet4/0/23
+!
+interface GigabitEthernet4/0/24
+!
+interface GigabitEthernet4/0/25
+!
+interface GigabitEthernet4/0/26
+!
+interface GigabitEthernet4/0/27
+!
+interface GigabitEthernet4/0/28
+!
+interface GigabitEthernet4/0/29
+!
+interface GigabitEthernet4/0/30
+!
+interface GigabitEthernet4/0/31
+!
+interface GigabitEthernet4/0/32
+!
+interface GigabitEthernet4/0/33
+!
+interface GigabitEthernet4/0/34
+!
+interface GigabitEthernet4/0/35
+!
+interface GigabitEthernet4/0/36
+!
+interface GigabitEthernet4/0/37
+!
+interface GigabitEthernet4/0/38
+!
+interface GigabitEthernet4/0/39
+!
+interface GigabitEthernet4/0/40
+!
+interface GigabitEthernet4/0/41
+!
+interface GigabitEthernet4/0/42
+!
+interface GigabitEthernet4/0/43
+!
+interface GigabitEthernet4/0/44
+!
+interface GigabitEthernet4/0/45
+!
+interface GigabitEthernet4/0/46
+!
+interface GigabitEthernet4/0/47
+!
+interface GigabitEthernet4/0/48
+!
+interface GigabitEthernet4/1/1
+!
+interface GigabitEthernet4/1/2
+!
+interface GigabitEthernet4/1/3
+!
+interface GigabitEthernet4/1/4
+!
+interface TenGigabitEthernet4/1/1
+!
+interface TenGigabitEthernet4/1/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan101
+ ip address 10.1.101.10 255.255.255.0
+!
+interface Vlan201
+ vrf forwarding red
+ ip address 10.1.201.10 255.255.255.0
+!
+interface Vlan202
+ ip address dhcp
+!
+ip forward-protocol nd
+!
+!
+ip ftp source-interface FastEthernet0
+ip ftp username calo
+ip ftp password calo
+ip http server
+ip http secure-server
+ip tftp source-interface FastEthernet0
+ip tftp blocksize 8192
+ip route 0.0.0.0 0.0.0.0 10.122.186.1
+ip route 10.122.157.250 255.255.255.255 10.122.186.1
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ password cisco!123
+ login local
+line vty 0 4
+ password cisco!123
+ login local
+ transport input all
+line vty 5 15
+ password cisco!123
+ login local
+ transport input all
+!
