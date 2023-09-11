@@ -1,0 +1,706 @@
+hostname F241.03-23-9600-2-Leaf03
+!
+!
+vrf definition Mgmt-vrf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition green
+ rd 1:1
+ !
+ address-family ipv4
+  mdt auto-discovery vxlan
+  mdt default vxlan 239.1.1.1
+  mdt overlay use-bgp spt-only
+  route-target export 1:1
+  route-target import 1:1
+  route-target export 1:1 stitching
+  route-target import 1:1 stitching
+ exit-address-family
+!
+no logging console
+no aaa new-model
+boot system bootflash:cat9k_iosxe.17.12.01.SPA.bin
+power redundancy-mode combined
+!
+ip multicast-routing
+ip multicast-routing vrf green
+!
+!
+!
+login on-success log
+vtp version 1
+!
+!
+!
+!
+!
+!
+!
+l2vpn evpn
+ replication-type static
+ flooding-suppression address-resolution disable
+ router-id Loopback1
+ default-gateway advertise
+!
+l2vpn evpn instance 101 vlan-based
+ encapsulation vxlan
+!
+l2vpn evpn instance 102 vlan-based
+ encapsulation vxlan
+!
+l2vpn evpn instance 201 vlan-based
+ encapsulation vxlan
+ replication-type ingress
+ multicast advertise enable
+!
+l2vpn evpn instance 202 vlan-based
+ encapsulation vxlan
+ replication-type ingress
+ multicast advertise enable
+!
+!
+crypto pki trustpoint TP-self-signed-3462408153
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3462408153
+ revocation-check none
+ rsakeypair TP-self-signed-3462408153
+ hash sha256
+!
+crypto pki trustpoint SLA-TrustPoint
+ enrollment pkcs12
+ revocation-check crl
+ hash sha256
+!
+!
+crypto pki certificate chain TP-self-signed-3462408153
+ certificate self-signed 01
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030
+  31312F30 2D060355 04030C26 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 33343632 34303831 3533301E 170D3235 30323236 31373234
+  31395A17 0D333530 32323631 37323431 395A3031 312F302D 06035504 030C2649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 34363234
+  30383135 33308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201
+  0A028201 0100C187 EBD19135 D4141A38 270F9BF2 88DFEF76 2279808F D41E9E4D
+  66121CE1 B6F79C05 59521061 ED546732 D0533B0A 583E5ABD 33D41176 3DDCA108
+  E8F84102 6CE62A1B 1AED17C1 8357C28B 4C628CEB 22268420 4FC684F4 DE2299F2
+  D2B50F51 A4F9E038 468A2507 A3367DBA DD1F2377 98F7EA28 CD95B709 8A138E11
+  206C4B14 7818B01D 1ADD6DB5 EC5BFD1B D298155D 848319C4 DF26D018 D8DE2BF7
+  22C80066 FA5419EC AB0E2AC8 3619511F B9693C42 68807013 9ED36613 E7196E70
+  3EFFE84E 5AC1EF9D 8B126F93 DA4FA401 154DDF50 3605F309 803DC899 4E58830E
+  7554F798 A02732E5 E9E90E79 D8C78A76 34B44447 611273A7 EA42249E 110D578C
+  6BE5162C 901D0203 010001A3 53305130 1D060355 1D0E0416 04146BDF 6173132B
+  E3A74EBA 1385B668 B47B6C3F 8754301F 0603551D 23041830 1680146B DF617313
+  2BE3A74E BA1385B6 68B47B6C 3F875430 0F060355 1D130101 FF040530 030101FF
+  300D0609 2A864886 F70D0101 0B050003 82010100 4A622C18 9376340E 732D6380
+  084F6C51 CD5ECF42 23D21EAD 0CC417A5 E2AB6BCF 6873CF1B 814468AF F8F15622
+  EC55E773 740868B1 67231E0F 36803C71 B6A962ED 0C79B9C5 6B694285 AB23DF2D
+  7D1EAC42 84794506 D8B5D3CE 74B8183F 1C525AEE 5923540D 25A8A1DE 77CA63CC
+  DBDB7E21 3D4EE36C 349D1EF2 39097FF6 45E3797E C326484A 6A98C640 62F9276F
+  5D410909 D2EA340C 0F5D8F44 3E150484 E973D05E BDCA646A 693D5206 A4A65ED2
+  0D4A679D 51326475 330E3425 88D38A02 582700D0 EE28EB4A 89EAD7C9 C8E452B8
+  B0650F08 D660638D CC2DA74D 215EB844 AA967BB7 0FD96976 45E0907B 35AE9FC5
+  5CB8033C D9F48D86 D07AD784 9EAA7841 2D7A013A
+  	quit
+crypto pki certificate chain SLA-TrustPoint
+ certificate ca 01
+  30820321 30820209 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030
+  32310E30 0C060355 040A1305 43697363 6F312030 1E060355 04031317 43697363
+  6F204C69 63656E73 696E6720 526F6F74 20434130 1E170D31 33303533 30313934
+  3834375A 170D3338 30353330 31393438 34375A30 32310E30 0C060355 040A1305
+  43697363 6F312030 1E060355 04031317 43697363 6F204C69 63656E73 696E6720
+  526F6F74 20434130 82012230 0D06092A 864886F7 0D010101 05000382 010F0030
+  82010A02 82010100 A6BCBD96 131E05F7 145EA72C 2CD686E6 17222EA1 F1EFF64D
+  CBB4C798 212AA147 C655D8D7 9471380D 8711441E 1AAF071A 9CAE6388 8A38E520
+  1C394D78 462EF239 C659F715 B98C0A59 5BBB5CBD 0CFEBEA3 700A8BF7 D8F256EE
+  4AA4E80D DB6FD1C9 60B1FD18 FFC69C96 6FA68957 A2617DE7 104FDC5F EA2956AC
+  7390A3EB 2B5436AD C847A2C5 DAB553EB 69A9A535 58E9F3E3 C0BD23CF 58BD7188
+  68E69491 20F320E7 948E71D7 AE3BCC84 F10684C7 4BC8E00F 539BA42B 42C68BB7
+  C7479096 B4CB2D62 EA2F505D C7B062A4 6811D95B E8250FC4 5D5D5FB8 8F27D191
+  C55F0D76 61F9A4CD 3D992327 A8BB03BD 4E6D7069 7CBADF8B DF5F4368 95135E44
+  DFC7C6CF 04DD7FD1 02030100 01A34230 40300E06 03551D0F 0101FF04 04030201
+  06300F06 03551D13 0101FF04 05300301 01FF301D 0603551D 0E041604 1449DC85
+  4B3D31E5 1B3E6A17 606AF333 3D3B4C73 E8300D06 092A8648 86F70D01 010B0500
+  03820101 00507F24 D3932A66 86025D9F E838AE5C 6D4DF6B0 49631C78 240DA905
+  604EDCDE FF4FED2B 77FC460E CD636FDB DD44681E 3A5673AB 9093D3B1 6C9E3D8B
+  D98987BF E40CBD9E 1AECA0C2 2189BB5C 8FA85686 CD98B646 5575B146 8DFC66A8
+  467A3DF4 4D565700 6ADF0F0D CF835015 3C04FF7C 21E878AC 11BA9CD2 55A9232C
+  7CA7B7E6 C1AF74F6 152E99B7 B1FCF9BB E973DE7F 5BDDEB86 C71E3B49 1765308B
+  5FB0DA06 B92AFE7F 494E8A9E 07B85737 F3A58BE1 1A48A229 C37C1E69 39F08678
+  80DDCD16 D6BACECA EEBC7CF9 8428787B 35202CDC 60E4616A B623CDBD 230E3AFB
+  418616A9 4093E049 4D10AB75 27E86F73 932E35B5 8862FDAE 0275156F 719BB2F0
+  D697DF7F 28
+  	quit
+!
+!
+license boot level network-advantage addon dna-advantage
+archive
+ path bootflash:/ambtaylo-EVPN/
+ write-memory
+ time-period 30
+memory free low-watermark processor 288374
+!
+system mtu 9198
+diagnostic bootup level minimal
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+!
+enable secret 9 $9$.rFOua8uyCtAU.$4tcap8CBgHOpId4U88Y6MVv6nYNjNIE5o6IHjqyuTWk
+!
+username admin privilege 15 password 0 cisco!123
+!
+redundancy
+ mode sso
+!
+!
+!
+!
+!
+transceiver type all
+ monitoring
+!
+vlan configuration 101
+ member evpn-instance 101 vni 10101
+vlan configuration 102
+ member evpn-instance 102 vni 10102
+vlan configuration 201
+ member evpn-instance 201 vni 20101
+vlan configuration 202
+ member evpn-instance 202 vni 20201
+vlan configuration 901
+ member vni 50901
+!
+!
+class-map match-any system-cpp-police-ewlc-control
+  description EWLC Control
+class-map match-any system-cpp-police-topology-control
+  description Topology control
+class-map match-any system-cpp-police-sw-forward
+  description Sw forwarding, L2 LVX data packets, LOGGING, Transit Traffic
+class-map match-any system-cpp-default
+  description EWLC Data, Inter FED Traffic
+class-map match-any system-cpp-police-sys-data
+  description Openflow, Exception, EGR Exception, NFL Sampled Data, RPF Failed
+class-map match-any system-cpp-police-punt-webauth
+  description Punt Webauth
+class-map match-any system-cpp-police-l2lvx-control
+  description L2 LVX control packets
+class-map match-any system-cpp-police-forus
+  description Forus Address resolution and Forus traffic
+class-map match-any system-cpp-police-multicast-end-station
+  description MCAST END STATION
+class-map match-any system-cpp-police-high-rate-app
+  description High Rate Applications
+class-map match-any system-cpp-police-multicast
+  description MCAST Data
+class-map match-any system-cpp-police-l2-control
+  description L2 control
+class-map match-any system-cpp-police-dot1x-auth
+  description DOT1X Auth
+class-map match-any system-cpp-police-data
+  description ICMP redirect, ICMP_GEN and BROADCAST
+class-map match-any system-cpp-police-stackwise-virt-control
+  description Stackwise Virtual OOB
+class-map match-any non-client-nrt-class
+class-map match-any system-cpp-police-routing-control
+  description Routing control and Low Latency
+class-map match-any system-cpp-police-protocol-snooping
+  description Protocol snooping
+class-map match-any system-cpp-police-dhcp-snooping
+  description DHCP snooping
+class-map match-any system-cpp-police-ios-routing
+  description L2 control, Topology control, Routing control, Low Latency
+class-map match-any system-cpp-police-system-critical
+  description System Critical and Gold Pkt
+class-map match-any system-cpp-police-ios-feature
+  description ICMPGEN,BROADCAST,ICMP,L2LVXCntrl,ProtoSnoop,PuntWebauth,MCASTData,Transit,DOT1XAuth,Swfwd,LOGGING,L2LVXData,ForusTraffic,ForusARP,McastEndStn,Openflow,Exception,EGRExcption,NflSampled,RpfFailed
+!
+policy-map system-cpp-policy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 172.16.255.5 255.255.255.255
+ ip pim sparse-mode
+ ip ospf 1 area 0
+!
+interface Loopback1
+ ip address 172.16.254.5 255.255.255.255
+ ip pim sparse-mode
+ ip ospf 1 area 0
+!
+interface Loopback101
+ vrf forwarding green
+ no ip address
+!
+interface Loopback255
+ vrf forwarding green
+ ip address 10.2.255.255 255.255.255.255
+ ip pim sparse-mode
+!
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-vrf
+ ip address 10.122.186.2 255.255.255.240
+ negotiation auto
+!
+interface TwentyFiveGigE1/0/1
+!
+interface TwentyFiveGigE1/0/2
+!
+interface TwentyFiveGigE1/0/3
+!
+interface TwentyFiveGigE1/0/4
+!
+interface TwentyFiveGigE1/0/5
+!
+interface TwentyFiveGigE1/0/6
+!
+interface TwentyFiveGigE1/0/7
+!
+interface TwentyFiveGigE1/0/8
+!
+interface TwentyFiveGigE1/0/9
+!
+interface TwentyFiveGigE1/0/10
+!
+interface TwentyFiveGigE1/0/11
+!
+interface TwentyFiveGigE1/0/12
+!
+interface TwentyFiveGigE1/0/13
+!
+interface TwentyFiveGigE1/0/14
+!
+interface TwentyFiveGigE1/0/15
+!
+interface TwentyFiveGigE1/0/16
+!
+interface TwentyFiveGigE1/0/17
+!
+interface TwentyFiveGigE1/0/18
+!
+interface TwentyFiveGigE1/0/19
+!
+interface TwentyFiveGigE1/0/20
+!
+interface TwentyFiveGigE1/0/21
+!
+interface TwentyFiveGigE1/0/22
+!
+interface TwentyFiveGigE1/0/23
+!
+interface TwentyFiveGigE1/0/24
+!
+interface TwentyFiveGigE1/0/25
+!
+interface TwentyFiveGigE1/0/26
+!
+interface TwentyFiveGigE1/0/27
+!
+interface TwentyFiveGigE1/0/28
+!
+interface TwentyFiveGigE1/0/29
+!
+interface TwentyFiveGigE1/0/30
+!
+interface TwentyFiveGigE1/0/31
+!
+interface TwentyFiveGigE1/0/32
+!
+interface TwentyFiveGigE1/0/33
+!
+interface TwentyFiveGigE1/0/34
+!
+interface TwentyFiveGigE1/0/35
+!
+interface TwentyFiveGigE1/0/36
+!
+interface TwentyFiveGigE1/0/37
+!
+interface TwentyFiveGigE1/0/38
+!
+interface TwentyFiveGigE1/0/39
+!
+interface TwentyFiveGigE1/0/40
+!
+interface TwentyFiveGigE1/0/41
+!
+interface TwentyFiveGigE1/0/42
+!
+interface TwentyFiveGigE1/0/43
+!
+interface TwentyFiveGigE1/0/44
+!
+interface TwentyFiveGigE1/0/45
+!
+interface TwentyFiveGigE1/0/46
+!
+interface TwentyFiveGigE1/0/47
+ no switchport
+ ip address 172.16.1.18 255.255.255.252
+ ip pim sparse-mode
+ ip ospf 1 area 0
+!
+interface TwentyFiveGigE1/0/48
+ no switchport
+ ip address 172.16.1.22 255.255.255.252
+ ip pim sparse-mode
+ ip ospf 1 area 0
+!
+interface FortyGigabitEthernet2/0/1
+!
+interface FortyGigabitEthernet2/0/2
+!
+interface FortyGigabitEthernet2/0/3
+!
+interface FortyGigabitEthernet2/0/4
+!
+interface FortyGigabitEthernet2/0/5
+!
+interface FortyGigabitEthernet2/0/6
+!
+interface FortyGigabitEthernet2/0/7
+!
+interface FortyGigabitEthernet2/0/8
+!
+interface FortyGigabitEthernet2/0/9
+!
+interface FortyGigabitEthernet2/0/10
+!
+interface FortyGigabitEthernet2/0/11
+!
+interface FortyGigabitEthernet2/0/12
+!
+interface FortyGigabitEthernet2/0/13
+!
+interface FortyGigabitEthernet2/0/14
+!
+interface FortyGigabitEthernet2/0/15
+!
+interface FortyGigabitEthernet2/0/16
+!
+interface FortyGigabitEthernet2/0/17
+!
+interface FortyGigabitEthernet2/0/18
+!
+interface FortyGigabitEthernet2/0/19
+!
+interface FortyGigabitEthernet2/0/20
+!
+interface FortyGigabitEthernet2/0/21
+!
+interface FortyGigabitEthernet2/0/22
+!
+interface FortyGigabitEthernet2/0/23
+!
+interface FortyGigabitEthernet2/0/24
+!
+interface HundredGigE2/0/25
+ no enable
+!
+interface HundredGigE2/0/26
+!
+interface HundredGigE2/0/27
+ no enable
+!
+interface HundredGigE2/0/28
+!
+interface HundredGigE2/0/29
+ no enable
+!
+interface HundredGigE2/0/30
+!
+interface HundredGigE2/0/31
+ no enable
+!
+interface HundredGigE2/0/32
+!
+interface HundredGigE2/0/33
+ no enable
+!
+interface HundredGigE2/0/34
+!
+interface HundredGigE2/0/35
+ no enable
+!
+interface HundredGigE2/0/36
+!
+interface HundredGigE2/0/37
+ no enable
+!
+interface HundredGigE2/0/38
+!
+interface HundredGigE2/0/39
+ no enable
+!
+interface HundredGigE2/0/40
+!
+interface HundredGigE2/0/41
+ no enable
+!
+interface HundredGigE2/0/42
+!
+interface HundredGigE2/0/43
+ no enable
+!
+interface HundredGigE2/0/44
+!
+interface HundredGigE2/0/45
+ no enable
+!
+interface HundredGigE2/0/46
+!
+interface HundredGigE2/0/47
+ no enable
+!
+interface HundredGigE2/0/48
+!
+interface FortyGigabitEthernet5/0/1
+!
+interface FortyGigabitEthernet5/0/2
+!
+interface FortyGigabitEthernet5/0/3
+!
+interface FortyGigabitEthernet5/0/4
+!
+interface FortyGigabitEthernet5/0/5
+!
+interface FortyGigabitEthernet5/0/6
+!
+interface FortyGigabitEthernet5/0/7
+!
+interface FortyGigabitEthernet5/0/8
+!
+interface FortyGigabitEthernet5/0/9
+!
+interface FortyGigabitEthernet5/0/10
+!
+interface FortyGigabitEthernet5/0/11
+!
+interface FortyGigabitEthernet5/0/12
+!
+interface FortyGigabitEthernet5/0/13
+!
+interface FortyGigabitEthernet5/0/14
+!
+interface FortyGigabitEthernet5/0/15
+!
+interface FortyGigabitEthernet5/0/16
+!
+interface FortyGigabitEthernet5/0/17
+!
+interface FortyGigabitEthernet5/0/18
+!
+interface FortyGigabitEthernet5/0/19
+!
+interface FortyGigabitEthernet5/0/20
+!
+interface FortyGigabitEthernet5/0/21
+!
+interface FortyGigabitEthernet5/0/22
+!
+interface FortyGigabitEthernet5/0/23
+!
+interface FortyGigabitEthernet5/0/24
+!
+interface HundredGigE5/0/25
+ no enable
+!
+interface HundredGigE5/0/26
+!
+interface HundredGigE5/0/27
+ no enable
+!
+interface HundredGigE5/0/28
+!
+interface HundredGigE5/0/29
+ no enable
+!
+interface HundredGigE5/0/30
+!
+interface HundredGigE5/0/31
+ no enable
+!
+interface HundredGigE5/0/32
+!
+interface HundredGigE5/0/33
+ no enable
+!
+interface HundredGigE5/0/34
+!
+interface HundredGigE5/0/35
+ no enable
+!
+interface HundredGigE5/0/36
+!
+interface HundredGigE5/0/37
+ no enable
+!
+interface HundredGigE5/0/38
+!
+interface HundredGigE5/0/39
+ no enable
+!
+interface HundredGigE5/0/40
+!
+interface HundredGigE5/0/41
+ no enable
+!
+interface HundredGigE5/0/42
+!
+interface HundredGigE5/0/43
+ no enable
+!
+interface HundredGigE5/0/44
+!
+interface HundredGigE5/0/45
+ no enable
+!
+interface HundredGigE5/0/46
+!
+interface HundredGigE5/0/47
+ no enable
+!
+interface HundredGigE5/0/48
+!
+interface TenGigabitEthernet0/1
+ vrf forwarding Mgmt-vrf
+ no ip address
+ negotiation auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan101
+ vrf forwarding green
+ ip address 10.1.101.1 255.255.255.0
+ ip pim sparse-mode
+!
+interface Vlan102
+ vrf forwarding green
+ ip address 10.1.102.1 255.255.255.0
+ ip pim sparse-mode
+!
+interface Vlan901
+ vrf forwarding green
+ ip unnumbered Loopback1
+ ip pim sparse-mode
+ no autostate
+!
+interface nve1
+ no ip address
+ source-interface Loopback1
+ host-reachability protocol bgp
+ member vni 10101 mcast-group 225.0.0.101
+ member vni 50901 vrf green
+ member vni 10102 mcast-group 225.0.0.102
+ member vni 20201 ingress-replication
+ member vni 20101 ingress-replication
+!
+router ospf 1
+ router-id 172.16.255.5
+!
+router bgp 65001
+ bgp router-id 172.16.255.5
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 172.16.255.1 remote-as 65001
+ neighbor 172.16.255.1 update-source Loopback0
+ neighbor 172.16.255.2 remote-as 65001
+ neighbor 172.16.255.2 update-source Loopback0
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv4 mvpn
+  neighbor 172.16.255.1 activate
+  neighbor 172.16.255.1 send-community both
+  neighbor 172.16.255.2 activate
+  neighbor 172.16.255.2 send-community both
+ exit-address-family
+ !
+ address-family l2vpn evpn
+  neighbor 172.16.255.1 activate
+  neighbor 172.16.255.1 send-community both
+  neighbor 172.16.255.1 route-map POLICY-IN in
+  neighbor 172.16.255.1 route-map POLICY-OUT out
+  neighbor 172.16.255.2 activate
+  neighbor 172.16.255.2 send-community both
+  neighbor 172.16.255.2 route-map POLICY-IN in
+  neighbor 172.16.255.2 route-map POLICY-OUT out
+ exit-address-family
+ !
+ address-family ipv4 vrf green
+  advertise l2vpn evpn
+  redistribute static
+  redistribute connected
+ exit-address-family
+!
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+ip pim rp-address 172.16.255.255
+ip pim vrf green rp-address 10.2.255.255
+ip ftp source-interface GigabitEthernet0/0
+ip ftp username calo
+ip ftp password calo
+ip route vrf Mgmt-vrf 0.0.0.0 0.0.0.0 10.122.186.1
+ip ssh bulk-mode 131072
+!
+ip extcommunity-list expanded ALLOW-RT2 permit 65001:20[0-9]
+ip bgp-community new-format
+ip community-list standard BLOCK-RT3 permit 999:999
+!
+!
+!
+route-map POLICY-IN deny 5
+ match community BLOCK-RT3 exact-match
+!
+route-map POLICY-IN permit 10
+!
+route-map POLICY-OUT permit 5
+ match extcommunity ALLOW-RT2
+ match evpn route-type 3
+ set community 999:999
+!
+route-map POLICY-OUT permit 10
+!
+!
+!
+control-plane
+ service-policy input system-cpp-policy
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+line vty 0 4
+ privilege level 15
+ login local
+ transport input ssh
+line vty 5 15
+ privilege level 15
+ login local
+ transport input ssh
+!
